@@ -27,6 +27,14 @@
             <version>5.2.2</version>
         </dependency>
 
+        <!-- Apache commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.15.1</version>
+        </dependency>
+
+
         <!-- JACKSON -->
 
         <dependency>

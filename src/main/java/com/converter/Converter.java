@@ -9,10 +9,12 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
 
 class Converter {
+
     public static void xlsxToJson(String basePath) {
         try {
             // Define the relative path to the input Excel file
@@ -67,10 +69,11 @@ class Converter {
             String jsonFileName = excelFileName.replace(".xlsx", ".json");
             String jsonFilePath = basePath + File.separator + jsonFileName;
 
-            // Write JSON object to file
-            FileWriter fileWriter = new FileWriter(jsonFilePath);
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(fileWriter, root);
-            fileWriter.close();
+            // Write JSON object to file with UTF-8 BOM
+            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(jsonFilePath), StandardCharsets.UTF_8)) {
+                writer.write('\ufeff'); // Write UTF-8 BOM
+                objectMapper.writerWithDefaultPrettyPrinter().writeValue(writer, root);
+            }
 
             workbook.close();
             inputStream.close();
@@ -81,6 +84,8 @@ class Converter {
             e.printStackTrace();
         }
     }
+
+
 
     public static void jsonToCsv(String basePath) {
         try {
@@ -150,6 +155,7 @@ class Converter {
     }
 
 
+
     public static void jsonToXlsx(String basePath) {
         try {
             String jsonFileName = findFileName(basePath, ".json");
@@ -213,7 +219,6 @@ class Converter {
             e.printStackTrace();
         }
     }
-
 
 
 
